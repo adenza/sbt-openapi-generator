@@ -8,5 +8,5 @@ to generate Models and Controllers for REST services
 Step 1: create project/sbt-openapi-generator.sbt with:
 
 ```
-addSbtPlugin("com.github.chameleon82" % "sbt-openapi-generator" % Version)
+addSbtPlugin("com.github.adenza" % "sbt-openapi-generator" % Version)
 ```
