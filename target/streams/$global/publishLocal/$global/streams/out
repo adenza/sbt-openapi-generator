@@ -1,0 +1,10 @@
+[0m[[0m[0minfo[0m] [0m[0m:: delivering :: com.github.adenza#sbt-openapi-generator;0.1.0-SNAPSHOT :: 0.1.0-SNAPSHOT :: integration :: Sun Dec 01 15:29:19 ICT 2019[0m
+[0m[[0m[0mdebug[0m] [0m[0m	options = status=integration pubdate=Sun Dec 01 15:29:19 ICT 2019 validate=true resolveDynamicRevisions=true merge=true resolveId=null pubBranch=null[0m
+[0m[[0m[0minfo[0m] [0m[0m	delivering ivy file to /Users/aleksandrnekrasov/Projects/github/adenza/sbt-openapi-generator/target/scala-2.12/sbt-1.0/ivy-0.1.0-SNAPSHOT.xml[0m
+[0m[[0m[0mdebug[0m] [0m[0m	deliver done (8ms)[0m
+[0m[[0m[0mdebug[0m] [0m[0mlocal do not support transaction. ivy pattern does not use revision as a directory[0m
+[0m[[0m[0minfo[0m] [0m[0m	published sbt-openapi-generator to /Users/aleksandrnekrasov/.ivy2/local/com.github.adenza/sbt-openapi-generator/scala_2.12/sbt_1.0/0.1.0-SNAPSHOT/poms/sbt-openapi-generator.pom[0m
+[0m[[0m[0minfo[0m] [0m[0m	published sbt-openapi-generator to /Users/aleksandrnekrasov/.ivy2/local/com.github.adenza/sbt-openapi-generator/scala_2.12/sbt_1.0/0.1.0-SNAPSHOT/jars/sbt-openapi-generator.jar[0m
+[0m[[0m[0minfo[0m] [0m[0m	published sbt-openapi-generator to /Users/aleksandrnekrasov/.ivy2/local/com.github.adenza/sbt-openapi-generator/scala_2.12/sbt_1.0/0.1.0-SNAPSHOT/srcs/sbt-openapi-generator-sources.jar[0m
+[0m[[0m[0minfo[0m] [0m[0m	published sbt-openapi-generator to /Users/aleksandrnekrasov/.ivy2/local/com.github.adenza/sbt-openapi-generator/scala_2.12/sbt_1.0/0.1.0-SNAPSHOT/docs/sbt-openapi-generator-javadoc.jar[0m
+[0m[[0m[0minfo[0m] [0m[0m	published ivy to /Users/aleksandrnekrasov/.ivy2/local/com.github.adenza/sbt-openapi-generator/scala_2.12/sbt_1.0/0.1.0-SNAPSHOT/ivys/ivy.xml[0m

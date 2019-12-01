@@ -1,18 +1,27 @@
-import sbt.Keys._
-import sbt._
+lazy val `sbt-openapi-generator` = project in file(".")
 
-version := "0.1"
+//import sbt.Keys._
+//import sbt._
+
 scalaVersion := "2.12.4"
+organization := "com.github.adenza"
+name := "sbt-openapi-generator"
+//licenses := Seq(("", url("")))
+description := "An sbt plugin that offers openapi generation features"
+startYear := Some(2019)
+homepage := scmInfo.value map (_.browseUrl)
+scmInfo := Some(ScmInfo(url("https://github.com/adenza/sbt-openapi-generator/"), "scm:git:git@github.com:adenza/sbt-openapi-generator.git"))
 
-// Define spec file for all projects
-inputFile in openApiGenerate := "spec.yaml"
+crossSbtVersions := List("0.13.17", "1.1.5")
 
-lazy val root = (project in file("."))
-  .settings(
-    name := "openapi-generator-example",
-    // Define task dependency
-    compile := ((compile in Compile) dependsOn openApiGenerate).value,
-    // Define plugin settings
-    language in openApiGenerate := "scala",
-    outputPath in openApiGenerate := s"${baseDirectory.value}/generated"
-  )
+
+libraryDependencies ++= Seq()
+
+
+enablePlugins(SbtPlugin)
+
+scriptedLaunchOpts += ("-Dplugin.version=" + version.value)
+scriptedLaunchOpts ++= sys.process.javaVmArguments.filter(
+  a => Seq("-Xmx", "-Xms", "-XX", "-      Dsbt.log.noformat").exists(a.startsWith)
+)
+scriptedBufferLog := false

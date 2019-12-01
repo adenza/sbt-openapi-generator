@@ -1,0 +1,3 @@
+> openApiGenerate
+$ exists generated/build.sbt
+> compile
