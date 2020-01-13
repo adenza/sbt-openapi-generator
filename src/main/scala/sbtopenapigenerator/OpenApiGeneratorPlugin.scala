@@ -49,7 +49,7 @@ object OpenApiGeneratorPlugin extends AutoPlugin {
     val lang: String = (OpenApiCodegen / language).value
 
     if (!lang.equals("")) {
-      val codegenConfig = if (!conf.equals())
+      val codegenConfig = if (!conf.equals(""))
         Option(CodegenConfigurator.fromFile(conf)).getOrElse(new CodegenConfigurator())
       else new CodegenConfigurator()
 
