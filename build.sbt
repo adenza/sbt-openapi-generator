@@ -1,6 +1,6 @@
 lazy val `sbt-openapi-generator` = Project("sbt-openapi-generator", file("."))
 
-scalaVersion := "2.12.4"
+scalaVersion := "2.12.10"
 organization := "com.github.adenza"
 name := "sbt-openapi-generator"
 description := "An sbt plugin that offers openapi generation features"
