@@ -12,7 +12,7 @@ lazy val generated = Project("generated", file("generated"))
       Seq(
         inputSpec := "openapi.yaml",
         language := "scala-akka",
-        configFile := "config1.yaml",
+        configFile := "config.yaml",
         //outputPath in openApiGenerate := (baseDirectory in ThisBuild).value + "/generated"
       )
     }

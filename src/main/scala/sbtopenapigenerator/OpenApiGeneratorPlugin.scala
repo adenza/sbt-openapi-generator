@@ -6,8 +6,12 @@ import org.openapitools.codegen.DefaultGenerator
 import org.openapitools.codegen.config.CodegenConfigurator
 import sbt.plugins.JvmPlugin
 import sbt.librarymanagement.Configuration
+import sbtopenapigenerator.tasks.OpenApiGeneratorsTask
 
-object OpenApiGeneratorPlugin extends AutoPlugin {
+import scala.collection.JavaConverters._
+
+
+object OpenApiGeneratorPlugin extends AutoPlugin with OpenApiGeneratorsTask {
   self =>
 
   protected lazy val OpenApiCodegen: Configuration = Configuration.of(
@@ -30,7 +34,8 @@ object OpenApiGeneratorPlugin extends AutoPlugin {
   )
 
   override lazy val projectSettings: Seq[Def.Setting[_]] = inConfig(OpenApiCodegen)(Seq[Setting[_]](
-    openApiGenerate := codegenTask.value,
+    openApiGenerate := openApiGenerateTask.value,
+    openApiGenerators := openApiGeneratorsTask.value,
     configFile := "",
     inputSpec := "swagger.yaml",
     language := "",
@@ -39,8 +44,7 @@ object OpenApiGeneratorPlugin extends AutoPlugin {
 
   override def projectConfigurations: List[Configuration] = OpenApiCodegen :: Nil
 
-  private[this] def codegenTask: Def.Initialize[Task[Seq[File]]] = Def.task {
-    import scala.collection.JavaConverters._
+  private[this] def openApiGenerateTask: Def.Initialize[Task[Seq[File]]] = Def.task {
 
     val logger = sbt.Keys.streams.value.log
 
@@ -66,4 +70,6 @@ object OpenApiGeneratorPlugin extends AutoPlugin {
     else
       Seq()
   }
+
+
 }
