@@ -1,13 +1,13 @@
 package sbtopenapigenerator
 
-import sbt.{Def, _}
-import Keys._
+import sbt.{Def, ThisBuild, inConfig}
+import sbt.Keys.{baseDirectory, aggregate}
 import sbt.plugins.JvmPlugin
 import sbt.librarymanagement.Configuration
 import sbtopenapigenerator.configs.OpenApiCodegen
 import sbtopenapigenerator.tasks.{OpenApiGenerateTask, OpenApiGeneratorsTask}
 
-object OpenApiGeneratorPlugin extends AutoPlugin
+object OpenApiGeneratorPlugin extends sbt.AutoPlugin
   with OpenApiGeneratorsTask
   with OpenApiGenerateTask
   with OpenApiCodegen {
@@ -15,26 +15,73 @@ object OpenApiGeneratorPlugin extends AutoPlugin
 
   override def requires: JvmPlugin.type = sbt.plugins.JvmPlugin
 
-  override def trigger: PluginTrigger = allRequirements
+  override def trigger: sbt.PluginTrigger = allRequirements
 
   object autoImport extends OpenApiGeneratorKeys {
     val OpenApiCodegen = self.OpenApiCodegen
   }
 
- // import autoImport._
-
-  override def globalSettings: Seq[Def.Setting[String]] = Seq(
-    outputDir := s"${baseDirectory.in(ThisBuild).value}/generated"
+  override def globalSettings: Seq[Def.Setting[_]] = Seq(
+    outputDir := s"${baseDirectory.in(ThisBuild).value}/generated",
+    aggregate in (OpenApiCodegen / openApiGenerators) := false
   )
 
-  override lazy val projectSettings: Seq[Def.Setting[_]] = inConfig(OpenApiCodegen)(Seq[Setting[_]](
-    openApiGenerate := openApiGenerateTask.value,
-    openApiGenerators := openApiGeneratorsTask.value,
-    configFile := "",
-    inputSpec := "swagger.yaml",
+
+  private lazy val baseSettings: Seq[sbt.Setting[_]] = Seq[sbt.Setting[_]](
     language := "",
-    additionalProperties := Map.empty[String, String]
-  ))
+    inputSpec := "",
+    outputDir := "",
+    configFile := "",
+    additionalProperties := Map.empty[String, String],
+    systemProperties := Map.empty[String, String],
+
+    verbose := None,
+    validateSpec := None,
+    generatorName := "",
+    templateDir := "",
+    auth := "",
+    skipOverwrite := None,
+    packageName := "",
+    apiPackage := "",
+    modelPackage := "",
+    modelNamePrefix := "",
+    modelNameSuffix := "",
+    instantiationTypes := Map.empty[String, String],
+    typeMappings := Map.empty[String, String],
+    serverVariables := Map.empty[String, String],
+    languageSpecificPrimitives := List[String](),
+    importMappings := Map.empty[String, String],
+    invokerPackage := "",
+    groupId := "",
+    id := "",
+    library := "",
+    gitHost := "",
+    gitUserId := "",
+    gitRepoId := "",
+    releaseNote := "",
+    httpUserAgent := "",
+    reservedWordsMappings := Map.empty[String, String],
+    ignoreFileOverride := "",
+    removeOperationIdPrefix := None,
+    apiFilesConstrainedTo := List[String](),
+    modelFilesConstrainedTo := List[String](),
+    supportingFilesConstrainedTo := List[String](),
+    generateModelTests := None,
+    generateModelDocumentation := None,
+    generateApiTests := None,
+    generateApiDocumentation := None,
+    withXml := None,
+    logToStderr := None,
+    enablePostProcessFile := None,
+    skipValidateSpec := None,
+    generateAliasAsModel := None,
+    configOptions := Map.empty[String, String]
+  )
+
+  override lazy val projectSettings: Seq[Def.Setting[_]] = inConfig(OpenApiCodegen)(Seq[sbt.Setting[_]](
+    openApiGenerate := openApiGenerateTask.value,
+    openApiGenerators := openApiGeneratorsTask.value
+  ) ++ baseSettings)
 
   override def projectConfigurations: List[Configuration] = OpenApiCodegen :: Nil
 

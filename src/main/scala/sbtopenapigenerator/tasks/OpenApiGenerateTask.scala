@@ -2,8 +2,8 @@ package sbtopenapigenerator.tasks
 
 import org.openapitools.codegen.{CodegenConstants, DefaultGenerator}
 import org.openapitools.codegen.config.{CodegenConfigurator, GlobalSettings}
-import sbt.{Def, settingKey, _}
-import Keys._
+import sbt.{Def, _}
+import sbt.Keys._
 import sbtopenapigenerator.OpenApiGeneratorKeys
 import sbtopenapigenerator.configs.OpenApiCodegen
 
@@ -16,38 +16,11 @@ trait OpenApiGenerateTask extends OpenApiCodegen with OpenApiGeneratorKeys {
 
     val logger = sbt.Keys.streams.value.log
 
-    //    val conf: String = (OpenApiCodegen / configFile).value
-    //    val output: String = (OpenApiCodegen / outputDir).value
-    //    val lang: String = (OpenApiCodegen / language).value
-    //
-    //    if (!lang.equals("")) {
-    //      val codegenConfig = if (!conf.equals(""))
-    //        Option(CodegenConfigurator.fromFile(conf)).getOrElse(new CodegenConfigurator())
-    //      else new CodegenConfigurator()
-    //
-    //      codegenConfig.setInputSpec((OpenApiCodegen / inputSpec).value)
-    //      codegenConfig.setGeneratorName(lang)
-    //      if (!output.equals(""))
-    //        codegenConfig.setOutputDir(output)
-    //
-    //      val clientOptInput = codegenConfig.toClientOptInput
-    //
-    //      val codegen = new DefaultGenerator()
-    //      codegen.opts(clientOptInput).generate().asScala
-    //    }
-    //    else
-    //      Seq()
-
-    // New version
     val configurator: CodegenConfigurator = if ((OpenApiCodegen / configFile).value.nonEmpty) {
-      CodegenConfigurator.fromFile((OpenApiCodegen / configFile).value)
+      val config = (OpenApiCodegen / configFile).value
+      logger.info(s"read configuration from $config")
+      CodegenConfigurator.fromFile(config)
     } else new CodegenConfigurator()
-
-    if ((OpenApiCodegen / systemProperties).value.nonEmpty) {
-      systemProperties.value.foreach { v =>
-        configurator.addSystemProperty(v._1, v._2)
-      }
-    }
 
     if ((OpenApiCodegen / supportingFilesConstrainedTo).value.nonEmpty) {
       GlobalSettings.setProperty(CodegenConstants.SUPPORTING_FILES, (OpenApiCodegen / supportingFilesConstrainedTo).value.mkString(","))
@@ -67,140 +40,141 @@ trait OpenApiGenerateTask extends OpenApiCodegen with OpenApiGeneratorKeys {
       GlobalSettings.clearProperty(CodegenConstants.APIS)
     }
 
-    if ((OpenApiCodegen / generateApiDocumentation).value) {
-      GlobalSettings.setProperty(CodegenConstants.API_DOCS, (OpenApiCodegen / generateApiDocumentation).value.toString)
+    (OpenApiCodegen / generateApiDocumentation).value.foreach { value =>
+      GlobalSettings.setProperty(CodegenConstants.API_DOCS, value.toString)
     }
 
-    if ((OpenApiCodegen / generateModelDocumentation).value) {
-      GlobalSettings.setProperty(CodegenConstants.MODEL_DOCS, (OpenApiCodegen / generateModelDocumentation).value.toString)
+    (OpenApiCodegen / generateModelDocumentation).value.foreach { value =>
+      GlobalSettings.setProperty(CodegenConstants.MODEL_DOCS, value.toString)
     }
 
-    if ((OpenApiCodegen / generateModelTests).value) {
-      GlobalSettings.setProperty(CodegenConstants.MODEL_TESTS, (OpenApiCodegen / generateModelTests).value.toString)
+    (OpenApiCodegen / generateModelTests).value.foreach { value =>
+      GlobalSettings.setProperty(CodegenConstants.MODEL_TESTS, value.toString)
     }
 
-    if ((OpenApiCodegen / generateApiTests).value) {
-      GlobalSettings.setProperty(CodegenConstants.API_TESTS, (OpenApiCodegen / generateApiTests).value.toString)
+    (OpenApiCodegen / generateApiTests).value.foreach { value =>
+      GlobalSettings.setProperty(CodegenConstants.API_TESTS, value.toString)
     }
 
-    if ((OpenApiCodegen / withXml).value) {
-      GlobalSettings.setProperty(CodegenConstants.WITH_XML, (OpenApiCodegen / withXml).value.toString)
+    (OpenApiCodegen / withXml).value.foreach { value =>
+      GlobalSettings.setProperty(CodegenConstants.WITH_XML, value.toString)
     }
 
     // now override with any specified parameters
-    (OpenApiCodegen / verbose).map { value =>
+    (OpenApiCodegen / verbose).value.foreach { value =>
       configurator.setVerbose(value)
     }
-
-    (OpenApiCodegen / validateSpec).map { value =>
+    (OpenApiCodegen / validateSpec).value.foreach { value =>
       configurator.setValidateSpec(value)
     }
 
-    (OpenApiCodegen / skipOverwrite).map { value =>
+    (OpenApiCodegen / skipOverwrite).value.foreach { value =>
       configurator.setSkipOverwrite(value)
     }
 
-    (OpenApiCodegen / inputSpec).map { value =>
-      configurator.setInputSpec(value)
+    if ((OpenApiCodegen / inputSpec).value.nonEmpty) {
+      configurator.setInputSpec((OpenApiCodegen / inputSpec).value)
     }
 
-    (OpenApiCodegen / generatorName).map { value =>
-      configurator.setGeneratorName(value)
+
+    if ((OpenApiCodegen / generatorName).value.nonEmpty) {
+      configurator.setGeneratorName((OpenApiCodegen / generatorName).value)
     }
 
-    (OpenApiCodegen / outputDir).map { value =>
-      configurator.setOutputDir(value)
+    if ((OpenApiCodegen / outputDir).value.nonEmpty) {
+      configurator.setOutputDir((OpenApiCodegen / outputDir).value)
     }
 
-    (OpenApiCodegen / auth).map { value =>
-      configurator.setAuth(value)
+    if ((OpenApiCodegen / auth).value.nonEmpty) {
+      configurator.setAuth((OpenApiCodegen / auth).value)
     }
 
-    (OpenApiCodegen / templateDir).value.map { value =>
-      configurator.setTemplateDir(value)
+    if ((OpenApiCodegen / templateDir).value.nonEmpty) {
+      configurator.setTemplateDir((OpenApiCodegen / templateDir).value)
     }
 
-    (OpenApiCodegen / packageName).map { value =>
-      configurator.setPackageName(value)
+    if ((OpenApiCodegen / packageName).value.nonEmpty) {
+      configurator.setPackageName((OpenApiCodegen / packageName).value)
     }
 
-    (OpenApiCodegen / apiPackage).map { value =>
-      configurator.setApiPackage(value)
+    if ((OpenApiCodegen / apiPackage).value.nonEmpty) {
+      configurator.setApiPackage((OpenApiCodegen / apiPackage).value)
     }
 
-    (OpenApiCodegen / modelPackage).map { value =>
-      configurator.setModelPackage(value)
+    if ((OpenApiCodegen / modelPackage).value.nonEmpty) {
+      configurator.setModelPackage((OpenApiCodegen / modelPackage).value)
     }
 
-    (OpenApiCodegen / modelNamePrefix).map { value =>
-      configurator.setModelNamePrefix(value)
+    if ((OpenApiCodegen / modelNamePrefix).value.nonEmpty) {
+      configurator.setModelNamePrefix((OpenApiCodegen / modelNamePrefix).value)
     }
 
-    (OpenApiCodegen / modelNameSuffix).map { value =>
-      configurator.setModelNameSuffix(value)
+    if ((OpenApiCodegen / modelNameSuffix).value.nonEmpty) {
+      configurator.setModelNameSuffix((OpenApiCodegen / modelNameSuffix).value)
     }
 
-    (OpenApiCodegen / invokerPackage).map { value =>
-      configurator.setInvokerPackage(value)
+    if ((OpenApiCodegen / invokerPackage).value.nonEmpty) {
+      configurator.setInvokerPackage((OpenApiCodegen / invokerPackage).value)
     }
 
-    (OpenApiCodegen / groupId).map { value =>
-      configurator.setGroupId(value)
+    if ((OpenApiCodegen / groupId).value.nonEmpty) {
+      configurator.setGroupId((OpenApiCodegen / groupId).value)
     }
 
-    (OpenApiCodegen / id).map { value =>
-      configurator.setArtifactId(value)
+    if ((OpenApiCodegen / id).value.nonEmpty) {
+      configurator.setArtifactId((OpenApiCodegen / id).value)
     }
 
-    (OpenApiCodegen / version).map { value =>
-      configurator.setArtifactVersion(value)
+    if ((version in openApiGenerate).value.nonEmpty) {
+      configurator.setArtifactVersion((OpenApiCodegen / version).value)
     }
 
-    (OpenApiCodegen / library).value.map { value =>
-      configurator.setLibrary(value)
+    if ((OpenApiCodegen / library).value.nonEmpty) {
+      configurator.setLibrary((OpenApiCodegen / library).value)
     }
 
-    (OpenApiCodegen / gitHost).value.map { value =>
-      configurator.setGitHost(value)
+    if ((OpenApiCodegen / gitHost).value.nonEmpty) {
+      configurator.setGitHost((OpenApiCodegen / gitHost).value)
     }
 
-    (OpenApiCodegen / gitUserId).value.map { value =>
-      configurator.setGitUserId(value)
+    if ((OpenApiCodegen / gitUserId).value.nonEmpty) {
+      configurator.setGitUserId((OpenApiCodegen / gitUserId).value)
     }
 
-    (OpenApiCodegen / gitRepoId).value.map { value =>
-      configurator.setGitRepoId(value)
+
+    if ((OpenApiCodegen / gitRepoId).value.nonEmpty) {
+      configurator.setGitRepoId((OpenApiCodegen / gitRepoId).value)
     }
 
-    (OpenApiCodegen / releaseNote).value.map { value =>
-      configurator.setReleaseNote(value)
+    if ((OpenApiCodegen / releaseNote).value.nonEmpty) {
+      configurator.setReleaseNote((OpenApiCodegen / releaseNote).value)
     }
 
-    (OpenApiCodegen / httpUserAgent).value.map { value =>
-      configurator.setHttpUserAgent(value)
+    if ((OpenApiCodegen / httpUserAgent).value.nonEmpty) {
+      configurator.setHttpUserAgent((OpenApiCodegen / httpUserAgent).value)
     }
 
-    (OpenApiCodegen / ignoreFileOverride).value.map { value =>
-      configurator.setIgnoreFileOverride(value)
+    if ((OpenApiCodegen / ignoreFileOverride).value.nonEmpty) {
+      configurator.setIgnoreFileOverride((OpenApiCodegen / ignoreFileOverride).value)
     }
 
-    (OpenApiCodegen / removeOperationIdPrefix).value.map { value =>
+    (OpenApiCodegen / removeOperationIdPrefix).value.foreach { value =>
       configurator.setRemoveOperationIdPrefix(value)
     }
 
-    (OpenApiCodegen / logToStderr).map { value =>
+    (OpenApiCodegen / logToStderr).value.foreach { value =>
       configurator.setLogToStderr(value)
     }
 
-    (OpenApiCodegen / enablePostProcessFile).map { value =>
+    (OpenApiCodegen / enablePostProcessFile).value.foreach { value =>
       configurator.setEnablePostProcessFile(value)
     }
 
-    (OpenApiCodegen / skipValidateSpec).map { value =>
+    (OpenApiCodegen / skipValidateSpec).value.foreach { value =>
       configurator.setValidateSpec(!value)
     }
 
-    (OpenApiCodegen / generateAliasAsModel).map { value =>
+    (OpenApiCodegen / generateAliasAsModel).value.foreach { value =>
       configurator.setGenerateAliasAsModel(value)
     }
 
@@ -252,28 +226,34 @@ trait OpenApiGenerateTask extends OpenApiCodegen with OpenApiGeneratorKeys {
       }
     }
 
-    val clientOptInput = configurator.toClientOptInput
-    val codgenConfig = clientOptInput.getConfig
+    Try(configurator.toClientOptInput) match {
+      case Success(clientOptInput) =>
+        val codgenConfig = clientOptInput.getConfig
 
-    if ((OpenApiCodegen / configOptions).value.nonEmpty) {
-      val userSpecifiedConfigOptions = (OpenApiCodegen / configOptions).value
-      codgenConfig.cliOptions().forEach { it =>
-        if (userSpecifiedConfigOptions.contains(it.getOpt)) {
-          val opt = it.getOpt
-          clientOptInput.getConfig.additionalProperties.replace(opt, userSpecifiedConfigOptions(opt))
+        if ((OpenApiCodegen / configOptions).value.nonEmpty) {
+          val userSpecifiedConfigOptions = (OpenApiCodegen / configOptions).value
+          codgenConfig.cliOptions().forEach { it =>
+            if (userSpecifiedConfigOptions.contains(it.getOpt)) {
+              val opt = it.getOpt
+              clientOptInput.getConfig.additionalProperties.replace(opt, userSpecifiedConfigOptions(opt))
+            }
+          }
         }
-      }
-    }
 
-    Try {
-      val res = new DefaultGenerator().opts(clientOptInput).generate().asScala
+        Try {
+          val gen = new DefaultGenerator().opts(clientOptInput)
+          val res = gen.generate().asScala
 
-      logger.out(s"Successfully generated code to $outputDir")
-      res
-    } match {
-      case Success(value) => value
-      case Failure(ex) =>
-        throw new Exception("Code generation failed.", ex)
+          logger.out(s"Successfully generated code to ${clientOptInput.getConfig.getOutputDir}")
+          res
+        } match {
+          case Success(value) => value
+          case Failure(ex) =>
+            throw new Exception("Code generation failed.", ex)
+        }
+      case Failure(exception) =>
+        logger.info("project settings not configured")
+        Seq()
     }
   }
 }
