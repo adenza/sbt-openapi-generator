@@ -1,7 +1,7 @@
 package sbtopenapigenerator
 
 import sbt.{Def, ThisBuild, inConfig}
-import sbt.Keys.{baseDirectory, aggregate}
+import sbt.Keys.{baseDirectory, aggregate, _}
 import sbt.plugins.JvmPlugin
 import sbt.librarymanagement.Configuration
 import sbtopenapigenerator.configs.OpenApiCodegen
@@ -34,7 +34,6 @@ object OpenApiGeneratorPlugin extends sbt.AutoPlugin
     configFile := "",
     additionalProperties := Map.empty[String, String],
     systemProperties := Map.empty[String, String],
-
     verbose := None,
     validateSpec := None,
     generatorName := "",
@@ -74,13 +73,13 @@ object OpenApiGeneratorPlugin extends sbt.AutoPlugin
     logToStderr := None,
     enablePostProcessFile := None,
     skipValidateSpec := None,
-    generateAliasAsModel := None,
-    configOptions := Map.empty[String, String]
+    generateAliasAsModel := None
   )
 
   override lazy val projectSettings: Seq[Def.Setting[_]] = inConfig(OpenApiCodegen)(Seq[sbt.Setting[_]](
     openApiGenerate := openApiGenerateTask.value,
-    openApiGenerators := openApiGeneratorsTask.value
+    openApiGenerators := openApiGeneratorsTask.value,
+    sources := openApiGenerate.value
   ) ++ baseSettings)
 
   override def projectConfigurations: List[Configuration] = OpenApiCodegen :: Nil

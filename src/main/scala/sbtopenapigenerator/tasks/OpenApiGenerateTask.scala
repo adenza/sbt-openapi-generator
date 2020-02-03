@@ -228,17 +228,6 @@ trait OpenApiGenerateTask extends OpenApiCodegen with OpenApiGeneratorKeys {
 
     Try(configurator.toClientOptInput) match {
       case Success(clientOptInput) =>
-        val codgenConfig = clientOptInput.getConfig
-
-        if ((OpenApiCodegen / configOptions).value.nonEmpty) {
-          val userSpecifiedConfigOptions = (OpenApiCodegen / configOptions).value
-          codgenConfig.cliOptions().forEach { it =>
-            if (userSpecifiedConfigOptions.contains(it.getOpt)) {
-              val opt = it.getOpt
-              clientOptInput.getConfig.additionalProperties.replace(opt, userSpecifiedConfigOptions(opt))
-            }
-          }
-        }
 
         Try {
           val gen = new DefaultGenerator().opts(clientOptInput)
@@ -251,7 +240,7 @@ trait OpenApiGenerateTask extends OpenApiCodegen with OpenApiGeneratorKeys {
           case Failure(ex) =>
             throw new Exception("Code generation failed.", ex)
         }
-      case Failure(exception) =>
+      case Failure(_) =>
         logger.info("project settings not configured")
         Seq()
     }

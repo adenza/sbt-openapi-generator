@@ -26,11 +26,11 @@ trait OpenApiGeneratorKeys {
   final val auth = settingKey[String]("Adds authorization headers when fetching the OpenAPI definitions remotely.\n" +
     "Pass in a URL-encoded string of name:header with a comma separating multiple values")
   final val skipOverwrite = settingKey[Option[Boolean]]("Specifies if the existing files should be overwritten during the generation.")
-  final val packageName = settingKey[String]("Package for generated classes (where supported)")
-  final val apiPackage = settingKey[String]("Package for generated api classes")
-  final val modelPackage = settingKey[String]("Package for generated models")
-  final val modelNamePrefix = settingKey[String]("Prefix that will be prepended to all model names. Default is the empty string.")
-  final val modelNameSuffix = settingKey[String]("Suffix that will be appended to all model names. Default is the empty string.")
+  final val packageName = settingKey[String](CodegenConstants.PACKAGE_NAME_DESC)
+  final val apiPackage = settingKey[String](CodegenConstants.API_PACKAGE_DESC)
+  final val modelPackage = settingKey[String](CodegenConstants.MODEL_PACKAGE_DESC)
+  final val modelNamePrefix = settingKey[String](CodegenConstants.MODEL_NAME_PREFIX_DESC)
+  final val modelNameSuffix = settingKey[String](CodegenConstants.MODEL_NAME_SUFFIX_DESC)
   final val instantiationTypes = settingKey[Map[String, String]]("Sets instantiation type mappings.")
   final val typeMappings = settingKey[Map[String, String]]("Sets mappings between OpenAPI spec types and generated code types.")
   final val serverVariables = settingKey[Map[String, String]]("Sets server variable for server URL template substitution, in the format of name=value,name=value.\n"
@@ -38,18 +38,20 @@ trait OpenApiGeneratorKeys {
 
   final val languageSpecificPrimitives = settingKey[List[String]]("Specifies additional language specific primitive types in the format of type1,type2,type3,type3. For example: String,boolean,Boolean,Double.")
   final val importMappings = settingKey[Map[String, String]]("Specifies mappings between a given class and the import that should be used for that class.")
-  final val invokerPackage = settingKey[String]("Root package for generated code.")
-  final val groupId = settingKey[String]("GroupId in generated pom.xml/build.gradle/build.sbt or other build script. Language-specific conversions occur in non-jvm generators.")
-  final val id = settingKey[String]("ArtifactId in generated pom.xml/build.gradle/build.sbt or other build script. Language-specific conversions occur in non-jvm generators.")
- // final val version = settingKey[String]("Artifact version in generated pom.xml/build.gradle/build.sbt or other build script. Language-specific conversions occur in non-jvm generators.")
-  final val library = settingKey[String]("Reference the library template (sub-template) of a generator.")
-  final val gitHost = settingKey[String]("Git host, e.g. gitlab.com.")
-  final val gitUserId = settingKey[String]("Git user ID, e.g. openapitools.")
-  final val gitRepoId = settingKey[String]("Git repo ID, e.g. openapi-generator.")
-  final val releaseNote = settingKey[String]("Release note, default to 'Minor update'.")
-  final val httpUserAgent = settingKey[String]("HTTP user agent, e.g. codegen_csharp_api_client, default to 'OpenAPI-Generator/{packageVersion}}/{language}'")
+  final val invokerPackage = settingKey[String](CodegenConstants.INVOKER_PACKAGE_DESC)
+  //TODO: change to sbt organization
+  final val groupId = settingKey[String](CodegenConstants.GROUP_ID_DESC)
+  //TODO: change to sbt name
+  final val id = settingKey[String](CodegenConstants.ARTIFACT_ID_DESC)
+
+  final val library = settingKey[String](CodegenConstants.LIBRARY_DESC)
+  final val gitHost = settingKey[String](CodegenConstants.GIT_HOST_DESC)
+  final val gitUserId = settingKey[String](CodegenConstants.GIT_USER_ID_DESC)
+  final val gitRepoId = settingKey[String](CodegenConstants.GIT_REPO_ID_DESC)
+  final val releaseNote = settingKey[String](CodegenConstants.RELEASE_NOTE_DESC)
+  final val httpUserAgent = settingKey[String](CodegenConstants.HTTP_USER_AGENT_DESC)
   final val reservedWordsMappings = settingKey[Map[String, String]]("Specifies how a reserved name should be escaped to.")
-  final val ignoreFileOverride = settingKey[String]("Specifies an override location for the .openapi-generator-ignore file. Most useful on initial generation.")
+  final val ignoreFileOverride = settingKey[String](CodegenConstants.IGNORE_FILE_OVERRIDE_DESC)
   final val removeOperationIdPrefix = settingKey[Option[Boolean]]("Remove prefix of operationId, e.g. config_getId => getId")
 
   /**
@@ -92,7 +94,7 @@ trait OpenApiGeneratorKeys {
    * For more control over generation of individual files, configure an ignore file and
    * refer to it via [ignoreFileOverride].
    */
-  final val generateModelTests = settingKey[Option[Boolean]]("Defines whether or not model-related _test_ files should be generated.")
+  final val generateModelTests = settingKey[Option[Boolean]](CodegenConstants.GENERATE_MODEL_TESTS_DESC)
 
   /**
    * Defines whether or not model-related _documentation_ files should be generated.
@@ -112,7 +114,7 @@ trait OpenApiGeneratorKeys {
    * For more control over generation of individual files, configure an ignore file and
    * refer to it via [ignoreFileOverride].
    */
-  final val generateApiTests = settingKey[Option[Boolean]]("Defines whether or not api-related _test_ files should be generated.")
+  final val generateApiTests = settingKey[Option[Boolean]](CodegenConstants.GENERATE_API_TESTS_DESC)
 
   /**
    * Defines whether or not api-related _documentation_ files should be generated.
@@ -133,7 +135,7 @@ trait OpenApiGeneratorKeys {
    * LANG_POST_PROCESS_FILE (e.g. GO_POST_PROCESS_FILE, SCALA_POST_PROCESS_FILE). Please open an issue if your target
    * generator does not support this functionality.
    */
-  final val enablePostProcessFile = settingKey[Option[Boolean]]("To enable the file post-processing hook. This enables executing an external post-processor (usually a linter program).")
+  final val enablePostProcessFile = settingKey[Option[Boolean]](CodegenConstants.ENABLE_POST_PROCESS_FILE_DESC)
 
   final val skipValidateSpec = settingKey[Option[Boolean]]("To skip spec validation. When true, we will skip the default behavior of validating a spec before generation.")
 
@@ -143,7 +145,5 @@ trait OpenApiGeneratorKeys {
    * When true, A model representation either containing or extending the array,list,map (depending on specific generator implementation) will be generated.
    */
   final val generateAliasAsModel = settingKey[Option[Boolean]](CodegenConstants.GENERATE_ALIAS_AS_MODEL_DESC)
-
-  final val configOptions = settingKey[Map[String, String]]("A dynamic map of options specific to a generator.")
 
 }

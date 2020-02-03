@@ -2,7 +2,7 @@ scalaVersion := "2.12.4"
 
 enablePlugins(OpenApiGeneratorPlugin)
 
-lazy val generated = Project("generated", file("generated"))
+lazy val generated = project.in(file("generated"))
   .settings(
     inConfig(OpenApiCodegen) {
       Seq(
