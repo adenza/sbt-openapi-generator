@@ -10,7 +10,6 @@ lazy val generated = project.in(file("generated"))
         configFile := "config.yaml",
         validateSpec := SettingDisabled,
         generateModelTests := SettingEnabled,
-        //outputPath in openApiGenerate := (baseDirectory in ThisBuild).value + "/generated"
       )
     }
   )
