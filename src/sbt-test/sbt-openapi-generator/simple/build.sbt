@@ -7,8 +7,9 @@ lazy val generated = project.in(file("generated"))
     inConfig(OpenApiCodegen) {
       Seq(
         inputSpec := "openapi.yaml",
-        language := "scala-akka",
         configFile := "config.yaml",
+        validateSpec := SettingDisabled,
+        generateModelTests := SettingEnabled,
         //outputPath in openApiGenerate := (baseDirectory in ThisBuild).value + "/generated"
       )
     }

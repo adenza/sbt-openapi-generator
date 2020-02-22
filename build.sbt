@@ -10,7 +10,7 @@ scmInfo := Some(ScmInfo(url("https://github.com/adenza/sbt-openapi-generator/"),
 
 crossSbtVersions := List("0.13.17", "1.1.5")
 
-libraryDependencies += "org.openapitools" % "openapi-generator" % "4.2.2"
+libraryDependencies += "org.openapitools" % "openapi-generator" % "4.2.3"
 
 enablePlugins(SbtPlugin)
 

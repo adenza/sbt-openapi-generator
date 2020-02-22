@@ -19,6 +19,10 @@ object OpenApiGeneratorPlugin extends sbt.AutoPlugin
 
   object autoImport extends OpenApiGeneratorKeys {
     val OpenApiCodegen = self.OpenApiCodegen
+
+      def SettingEnabled: Option[Boolean] = Some(true)
+      def SettingDisabled: Option[Boolean] = Some(false)
+
   }
 
   override def globalSettings: Seq[Def.Setting[_]] = Seq(
