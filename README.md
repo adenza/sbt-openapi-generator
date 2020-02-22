@@ -1,4 +1,4 @@
-# sbt-openapi-generator
+# sbt-openapi-generator [ ![Download](https://api.bintray.com/packages/adenza/sbt-plugins/sbt-openapi-generator/images/download.svg) ](https://bintray.com/adenza/sbt-plugins/sbt-openapi-generator/_latestVersion) ![Scala CI](https://github.com/adenza/sbt-openapi-generator/workflows/Scala%20CI/badge.svg?branch=master)
 
 This plugin use [OpenApi-Generator](https://github.com/OpenAPITools/openapi-generator)(ex Swagger)
 to generate Models and Controllers for REST services
